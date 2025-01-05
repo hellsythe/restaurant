@@ -1,0 +1,30 @@
+services:
+
+  node:
+    image: node
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    networks:
+      - servers
+    volumes:
+      - ./:/app
+    ports:
+      - 3000:3000
+    working_dir: /app
+
+  mockserver:
+    image: mockserver/mockserver
+    command: -logLevel DEBUG -serverPort 1090 -proxyRemotePort 80 -proxyRemoteHost www.mock-server.com
+    ports:
+      - 1080:1090
+    environment:
+      MOCKSERVER_LOG_LEVEL: DEBUG
+      MOCKSERVER_INITIALIZATION_JSON_PATH: /config/expectationInitialiser.json
+      MOCKSERVER_PROPERTY_FILE: "/config/mockserver.custom.properties"
+    volumes:
+      - ./docker:/config
+networks:
+  servers:
+    driver: bridge
+
+volumes:
+  minio: {}
