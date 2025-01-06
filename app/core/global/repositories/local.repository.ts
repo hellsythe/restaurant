@@ -1,6 +1,6 @@
 import { EntityTable } from "dexie";
 import { RepositoryInterface } from "./repository.interface";
-import type { UuidGeneratorInterface } from "./services/interfaces/uuid-generator.interface";
+import type { UuidGeneratorInterface } from "../services/interfaces/uuid-generator.interface";
 import { inject, injectable } from "tsyringe"
 
 @injectable()

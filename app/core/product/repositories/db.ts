@@ -1,5 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie';
-import { Product } from './product.model';
+import { Product } from '../product.model';
 
 const db = new Dexie('Database') as Dexie & {
   products: EntityTable<

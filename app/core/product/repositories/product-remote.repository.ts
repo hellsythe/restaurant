@@ -1,13 +1,20 @@
 import { injectable } from "tsyringe";
-import { RepositoryInterface } from "../global/repository.interface";
-import { CreateProductDto } from "./dtos/create-product.dto";
-import { Product } from "./product.model";
+import { RepositoryInterface } from "../../global/repositories/repository.interface";
+import { CreateProductDto } from "../dtos/create-product.dto";
+import { Product } from "../product.model";
+import { UpdateProductDto } from "../dtos/update-product.dto";
 
 @injectable()
-export class ProductRemoteRepository implements RepositoryInterface<Product, CreateProductDto> {
+export class ProductRemoteRepository implements RepositoryInterface<Product, CreateProductDto, UpdateProductDto> {
   url: string;
   constructor() {
     this.url = process.env.NEXT_PUBLIC_PRODUCT_API_URL || '';
+  }
+  async findById(id: string): Promise<Product> {
+    throw new Error("Method not implemented.");
+  }
+  async update(id: string, data: UpdateProductDto): Promise<void> {
+    throw new Error("Method not implemented.");
   }
 
   async create(data: CreateProductDto): Promise<string> {
