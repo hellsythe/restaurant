@@ -2,6 +2,7 @@ import { EntityTable } from "dexie";
 import { RepositoryInterface } from "./repository.interface";
 import type { UuidGeneratorInterface } from "../services/interfaces/uuid-generator.interface";
 import { inject, injectable } from "tsyringe"
+import { NotFoundError, RepositoryError } from "../erros/common";
 
 @injectable()
 export class LocalRepository<Model extends { id: string }, CreateDto, UpdateDto> implements RepositoryInterface<Model, CreateDto, UpdateDto> {
@@ -20,7 +21,7 @@ export class LocalRepository<Model extends { id: string }, CreateDto, UpdateDto>
   async findById(id: string): Promise<Model> {
     const result = await this.table.where({id}).first();
     if (!result) {
-      throw new Error(`Model with id ${id} not found`);
+      throw new NotFoundError(`Model with id ${id} not found`);
     }
     return result;
   }
@@ -34,7 +35,7 @@ export class LocalRepository<Model extends { id: string }, CreateDto, UpdateDto>
       return id;
     }
 
-    throw new Error('Failed to create: ID was not returned as a string.');
+    throw new RepositoryError('Failed to create entity');
   }
 
   async update(id: string, data: UpdateDto): Promise<void> {
@@ -43,11 +44,15 @@ export class LocalRepository<Model extends { id: string }, CreateDto, UpdateDto>
     });
 
     if (result === 0) {
-      throw new Error(`Model with id ${id} not found`);
+      throw new NotFoundError(`Model with id ${id} not found`);
     }
   }
 
   async delete(id: string): Promise<void> {
-    await this.table.where({id}).delete();
+    const result = await this.table.where({id}).delete();
+
+    if (result === 0) {
+      throw new NotFoundError(`Model with id ${id} not found`);
+    }
   }
 }
