@@ -56,13 +56,13 @@ describe('ProductLocalRepository', () => {
    test('find product by query', async () => {
       await repository.create({ name: 'test find query', price: 100 });
       const products = await repository.find({ name: 'test find query' });
-      expect(products.length).toBe(1);
-      expect(products[0].name).toBe('test find query');
+      expect(products.data.length).toBe(1);
+      expect(products.data[0].name).toBe('test find query');
    });
 
    test('find missing product by query', async () => {
       const products = await repository.find({ name: 'test find query missing' });
-      expect(products.length).toBe(0);
+      expect(products.data.length).toBe(0);
    });
 
 
